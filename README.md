@@ -80,3 +80,13 @@ CDSE extracts a time series for each species, providing detailed insights into s
 <div align="center">
      <img src="./pics/Figure_5.png" alt="CDSE during Dawn Chorus" width="500">
 </div>
+
+## Integrate Data used in Publication for Replication
+The data used in this project have been processed using the university service. Unfortunately, the original directory structure could not be preserved. Instead, the data are provided as a split .zip archive that must be recombined (refer to the provided link for instructions).
+
+Once the unzipped directory is available, e.g., on an external drive, it can be easily accessed by creating a symbolic link. In Linux, this can be done by executing the following command within the cloned Github repository: ln -s path/to/unzipped_dir ./data
+
+Data available at: TBA
+
+## Contact
+For questions or issues, please contact [brueggemann@uni-osnabrueck.de].
