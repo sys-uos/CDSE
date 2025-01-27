@@ -16,18 +16,18 @@ For details, please read our ([Pre-Print](https://papers.ssrn.com/sol3/papers.cf
 This repo contains the CDSE algorithm and scripts for processing data used for publication.
 This is the most advanced version of CDSE for acoustic analyses and we will keep this repository up-to-date and provide improved interfaces to enable scientists with no CS background to run the analysis.
 
-Feel free to use CDSE for your acoustic analyses and research.
-We will update our citation as soon as the the paper is published. For now, please cite as: 
+Feel free to use CDSE for your acoustic analyses and research. Please cite as: 
 
 ```
-@article{Bruggemann2024cdse,
-  author       = {Brüggemann, Leonhard and Dyczka, Mario and Otten, Daniel and Aschenbruck, Nils},
-  title        = {A Classifier-Integrated Signal Extraction Approach for Time Difference Estimation in Acoustic Sensor Networks},
-  year         = {2024},
-  month        = {August},
-  url          = {https://ssrn.com/abstract=4957052},
-  doi          = {10.2139/ssrn.4957052},
-  note         = {Available at SSRN: \url{https://ssrn.com/abstract=4957052} or \url{http://dx.doi.org/10.2139/ssrn.4957052}}
+@article{BRUGGEMANN2025103032,
+title = {A classifier-deduced signal extraction approach for time difference estimation in acoustic sensor networks},
+journal = {Ecological Informatics},
+pages = {103032},
+year = {2025},
+issn = {1574-9541},
+doi = {https://doi.org/10.1016/j.ecoinf.2025.103032},
+url = {https://www.sciencedirect.com/science/article/pii/S157495412500041X},
+author = {Leonhard Brüggemann and Mario Dyczka and Daniel Otten and Nils Aschenbruck},
 }
 ```
 
@@ -86,7 +86,7 @@ The data used in this project have been processed using the university service. 
 
 Once the unzipped directory is available, e.g., on an external drive, it can be easily accessed by creating a symbolic link. In Linux, this can be done by executing the following command within the cloned Github repository: ln -s path/to/unzipped_dir ./data
 
-Data available at: TBA
+Data available at: [Link](https://doi.org/10.26249/FK2/VORDOF)
 
 ## Contact
 For questions or issues, please contact [brueggemann@uni-osnabrueck.de].
