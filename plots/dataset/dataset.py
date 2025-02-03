@@ -53,7 +53,7 @@ def plot_spectrogram(audio_path, output_image_path, font_size=14, multispecies=F
 
     # Set ticks at each second on the x-axis
     plt.xticks(fontsize=font_size)
-    plt.yticks(fontsize=font_size)
+    plt.yticks(range(0, 9, 2), fontsize=font_size)
     if multispecies == False:
         plt.axvspan(3.148688, 4.661709, color='red', alpha=0.25, label='Common Redstart')
 

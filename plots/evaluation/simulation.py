@@ -13,7 +13,7 @@ plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 plt.rc('text', usetex=True)  # use installed latex version to render labels
 
 
-def lineplot_confidences_over_time_and_distance(path, multi_source=True, ofile='unnamed_plot.pdf', font_size=10):
+def lineplot_confidences_over_time_and_distance(path, multi_source=True, ofile='unnamed_plot.pdf', font_size=10, legend_fontsize=30, ):
     pkl_file = open(path, 'rb')
     data = pickle.load(pkl_file)
     print("Read combined_data")
@@ -41,9 +41,10 @@ def lineplot_confidences_over_time_and_distance(path, multi_source=True, ofile='
     # Customize the main plot
     ax_main.set_xlabel('time [s]', fontsize=font_size)
     cbar = fig.colorbar(sm, ax=ax_sub2, label='source-to-node distance',
-                        pad=0.22)  # Add a colorbar with a label, associate with ax_main
+                        pad=0.3)  # Add a colorbar with a label, associate with ax_main
     cbar.ax.tick_params(labelsize=font_size)
-    cbar.set_label('source-to-node distance', fontsize=font_size)
+    cbar.set_label('source-to-node distance', fontsize=font_size, y=-0.2, ha='left')
+    cbar.set_ticks([0, 25, 50, 75, 100])  # Add ticks at 0, 25, 50, 75, and 100
     ax_main.grid(True)  # Enable grid for better readability
 
     # Fill the area between the vertical lines on the main plot
@@ -60,7 +61,7 @@ def lineplot_confidences_over_time_and_distance(path, multi_source=True, ofile='
         ax_main.axvspan(3 * 48000, 4.53 * 48000, color='red', alpha=0.25, label='Bird sound')
         bird_sound_patch = Patch(color='red', alpha=0.25, label="Common Redstart")
         # Add the legend with the custom patch
-        ax_main.legend(title="emission time of species sound ", handles=[bird_sound_patch], fontsize=font_size, title_fontsize=font_size)
+        ax_main.legend(title="emission time of species sound ", handles=[bird_sound_patch], fontsize=legend_fontsize, title_fontsize=legend_fontsize, loc="upper right")
 
     # Convert x-axis from samples to seconds for the main plot
     sampling_frequency = 48000  # 48 kHz
@@ -70,13 +71,16 @@ def lineplot_confidences_over_time_and_distance(path, multi_source=True, ofile='
     ax_main.set_xticks(time_ticks)  # Set custom ticks
     ax_main.set_xticklabels([f"{x / sampling_frequency:.1f}" for x in time_ticks], fontsize=font_size)  # Label ticks in seconds
 
-    ax_main.set_yticks([round(val,1) for val in np.arange(0, 1.1, 0.1)])  # Set y-ticks from min to max with a step of 0.1
-    ax_main.set_yticklabels([round(val,1) for val in np.arange(0, 1.1, 0.1)], fontsize=font_size)  # Set y-tick labels
+    ax_main.set_yticks([round(val,1) for val in np.arange(0, 1.1, 0.2)])  # Set y-ticks from min to max with a step of 0.1
+    ax_main.set_yticklabels([round(val,1) for val in np.arange(0, 1.1, 0.2)], fontsize=font_size)  # Set y-tick labels
+    ax_main.tick_params(axis='y', pad=20)  # Increase padding for y-ticks
 
     ax_sub1.set_yticks([round(val,1) for val in np.arange(0, 1.1, 0.1)])  # Set y-ticks from min to max with a step of 0.1
     ax_sub1.set_yticklabels([round(val,1) for val in np.arange(0, 1.1, 0.1)], fontsize=font_size)  # Set y-tick labels
+    ax_sub1.tick_params(axis='y', pad=20)  # Increase padding for y-ticks
     ax_sub2.set_yticks([round(val,1) for val in np.arange(0, 1.1, 0.1)])  # Set y-ticks from min to max with a step of 0.1
     ax_sub2.set_yticklabels([round(val,1) for val in np.arange(0, 1.1, 0.1)], fontsize=font_size)  # Set y-tick labels
+    ax_sub2.tick_params(axis='y', pad=20)  # Increase padding for y-ticks
 
     ax_main.set_xlim([0, 10 * sampling_frequency])  # Adjust xlim to match the 10-second window
     ax_main.set_ylim([0.0, 1.0])
@@ -120,12 +124,12 @@ def lineplot_confidences_over_time_and_distance(path, multi_source=True, ofile='
     # Add label with arrows below the x-axis in the middle of sub1
     x_middle = (0.6 * sampling_frequency)
     # Adding the arrow
-    ax_sub1.annotate('', xy=(0.2, -0.02), xycoords='axes fraction', xytext=(0.9, -0.02),
+    ax_sub1.annotate('', xy=(0.2, -0.04), xycoords='axes fraction', xytext=(0.9, -0.04),
             arrowprops=dict(arrowstyle="<-", color='black'))
-    ax_sub1.text(x_middle, -0.03, 'time shift', ha='center', fontsize=font_size, va='center',  fontstyle='italic')
+    ax_sub1.text(x_middle, -0.07, 'time shift', ha='center', fontsize=font_size, va='center',  fontstyle='italic')
 
     plt.tight_layout()
-    plt.subplots_adjust(wspace=0.1)  # Adjust the width space between subplots
+    plt.subplots_adjust(wspace=0.2)  # Adjust the width space between subplots
 
     plt.savefig(ofile)
     print(f"Plot successfully saved at: {os.path.relpath(ofile)}")
@@ -197,7 +201,7 @@ def plot_time_differences(filepath, opath, threshold_ms=50.0, font_size=16):
 def plot_multisource_lineplot_confidences_over_time_and_distance(ipaths=['./0.5_143999_multisource_redstart_combined_data_mean_of_samples_above_0.0.pkl',
                                                                          './0.5_143999_multisource_chaffinch_combined_data_mean_of_samples_above_0.0.pkl',
                                                                          './0.5_143999_multisource_tit_combined_data_mean_of_samples_above_0.0.pkl'],
-                                                                 opath='0.5_143999_combined_data_mean_of_samples_above_0.0_time_distance_plot.pdf', font_size=16):
+                                                                 opath='0.5_143999_combined_data_mean_of_samples_above_0.0_time_distance_plot.pdf', font_size=16, legend_fontsize=30):
     # Function to plot the data for each bird type
     def plot_data(ax_main, ax_sub1, data, color_map, bird_label):
         num_lines = len(data)
@@ -255,21 +259,30 @@ def plot_multisource_lineplot_confidences_over_time_and_distance(ipaths=['./0.5_
     divider_main = make_axes_locatable(ax_main)
 
     # Add colorbars with reduced gap
-    cax_red = divider_main.append_axes("right", size="1.5%", pad=1.0)
-    cax_blue = divider_main.append_axes("right", size="1.5%", pad=1.0)
-    cax_green = divider_main.append_axes("right", size="1.5%", pad=1.0)
+    cax_red = divider_main.append_axes("right", size="2.0%", pad=0.75)
+    cax_blue = divider_main.append_axes("right", size="2.0%", pad=1.75)
+    cax_green = divider_main.append_axes("right", size="2.0%", pad=1.75)
 
     cbar_red = fig.colorbar(sm_red, cax=cax_red, orientation='vertical',
-                            label='source-to-node distance (Common Redstart)')
+                            label='source-to-node distance (C. Redstart)')
     cbar_blue = fig.colorbar(sm_blue, cax=cax_blue, orientation='vertical',
-                             label='source-to-node distance (Common Chaffinch)')
+                             label='source-to-node distance (C. Chaffinch)')
     cbar_green = fig.colorbar(sm_green, cax=cax_green, orientation='vertical',
-                              label='source-to-node distance (Great Tit)')
+                              label='source-to-node distance (G. Tit)')
 
     # Set colorbar label fontsizes
-    cbar_red.ax.yaxis.label.set_size(font_size)
-    cbar_blue.ax.yaxis.label.set_size(font_size)
-    cbar_green.ax.yaxis.label.set_size(font_size)
+    cbar_red.ax.yaxis.label.set_size(legend_fontsize-2)
+    cbar_red.ax.yaxis.label.set_y(-0.325)
+    cbar_red.ax.yaxis.label.set_ha('left')
+    cbar_blue.ax.yaxis.label.set_size(legend_fontsize-2)
+    cbar_blue.ax.yaxis.label.set_y(-0.325)
+    cbar_blue.ax.yaxis.label.set_ha('left')
+    cbar_green.ax.yaxis.label.set_size(legend_fontsize-2)
+    cbar_green.ax.yaxis.label.set_y(-0.325)
+    cbar_green.ax.yaxis.label.set_ha('left')
+    cbar_blue.set_ticks([0, 25, 50, 75, 100])  # Add ticks at 0, 25, 50, 75, and 100
+    cbar_red.set_ticks([0, 25, 50, 75, 100])  # Add ticks at 0, 25, 50, 75, and 100
+    cbar_green.set_ticks([0, 25, 50, 75, 100])  # Add ticks at 0, 25, 50, 75, and 100
 
     # Set colorbar tick labels fontsize
     cbar_red.ax.tick_params(labelsize=font_size)
@@ -283,8 +296,8 @@ def plot_multisource_lineplot_confidences_over_time_and_distance(ipaths=['./0.5_
     bird_sound_patch3 = Patch(color='green', alpha=0.25, label="Great Tit")
     ax_main.axvspan(4 * 48000, 6.207563 * 48000, color='blue', alpha=0.25, label='Common Chaffinch')
     bird_sound_patch2 = Patch(color='blue', alpha=0.5, label="Common Chaffinch")
-    ax_main.legend(title="time of species sound (at source)",
-                   handles=[bird_sound_patch, bird_sound_patch2, bird_sound_patch3], fontsize=font_size, title_fontsize=font_size)
+    ax_main.legend(title="emission time of species sound",
+                   handles=[bird_sound_patch, bird_sound_patch2, bird_sound_patch3], fontsize=legend_fontsize, title_fontsize=legend_fontsize,  loc="upper right")
 
     # Convert x-axis from samples to seconds for the main plot
     sampling_frequency = 48000  # 48 kHz
@@ -292,12 +305,15 @@ def plot_multisource_lineplot_confidences_over_time_and_distance(ipaths=['./0.5_
     time_ticks = np.arange(0, max_sample_number + sampling_frequency,
                            sampling_frequency)  # Generate time ticks every 1 second
     ax_main.set_xticks(time_ticks)  # Set custom ticks
-    ax_main.set_xticklabels([f"{x / sampling_frequency:.1f}" for x in time_ticks], fontsize=font_size)  # Label ticks in seconds
+    ax_main.set_xticklabels([f"{x / sampling_frequency:.1f}" for x in time_ticks], fontsize=font_size, rotation=45)  # Label ticks in seconds
 
-    ax_main.set_yticks([round(val, 1) for val in np.arange(0, 1.1, 0.1)])  # Set y-ticks from min to max with a step of 0.1
-    ax_main.set_yticklabels([round(val, 1) for val in np.arange(0, 1.1, 0.1)], fontsize=font_size)
+    ax_main.set_yticks([round(val, 1) for val in np.arange(0, 1.1, 0.2)])  # Set y-ticks from min to max with a step of 0.1
+    ax_main.set_yticklabels([round(val, 1) for val in np.arange(0, 1.1, 0.2)], fontsize=font_size)
+    ax_main.tick_params(axis='y', pad=20)  # Increase padding for y-ticks
+
     ax_sub1.set_yticks([round(val, 1) for val in np.arange(0, 1.1, 0.1)])  # Set y-ticks from min to max with a step of 0.1
     ax_sub1.set_yticklabels([round(val, 1) for val in np.arange(0, 1.1, 0.1)], fontsize=font_size)
+    ax_sub1.tick_params(axis='y', pad=20)  # Increase padding for y-ticks
 
     ax_main.set_xlim([0, 11 * sampling_frequency])  # Adjust xlim to match the 10-second window
     ax_main.set_ylim([0.0, 1.0])
@@ -318,7 +334,7 @@ def plot_multisource_lineplot_confidences_over_time_and_distance(ipaths=['./0.5_
     ax_sub1.set_xticklabels([f"{x / sampling_frequency:.1f}" for x in time_ticks_sub1], fontsize=font_size)  # Label ticks in seconds
 
     plt.tight_layout()
-    plt.subplots_adjust(wspace=0.05)  # Adjust the width space between subplots
+    plt.subplots_adjust(wspace=0.125)  # Adjust the width space between subplots
 
     plt.savefig(opath)
     print(f"Plot successfully saved at: {os.path.relpath(opath)}")
@@ -359,7 +375,7 @@ def plot_impact_of_threshold_singlespecies(ipaths_redstart=None, opath='singlesp
 
         # Set custom ticks with font size
         plt.xticks(time_ticks, np.arange(0, len(time_ticks), 1), fontsize=font_size)
-        plt.yticks(fontsize=font_size)
+        plt.yticks([round(val,1) for val in np.arange(0, 1.1, 0.2)], fontsize=font_size)
         plt.xlim([0, (len(time_ticks) -1 ) * sampling_frequency])
         plt.ylim([0,0.6])
 
@@ -368,7 +384,9 @@ def plot_impact_of_threshold_singlespecies(ipaths_redstart=None, opath='singlesp
         plt.ylabel("confidence", fontsize=font_size)
 
         # Add legend with title and font size
-        plt.legend(title='Confidence Threshold', title_fontsize=font_size, fontsize=font_size)
+        plt.legend(title='Confidence Threshold', title_fontsize=font_size, fontsize=font_size, ncol=2)
+
+        plt.grid(True)
 
         plt.tight_layout()
 
@@ -429,7 +447,7 @@ def plot_impact_of_threshold_multispecies(ipaths_redstart = None, ipaths_chaffin
 
         # Set custom ticks with font size
         plt.xticks(time_ticks, np.arange(0, len(time_ticks), 1), fontsize=font_size)
-        plt.yticks(fontsize=font_size)
+        plt.yticks([round(val,1) for val in np.arange(0, 1.1, 0.2)], fontsize=font_size)
 
         plt.xlim([0, (11 - 1) * sampling_frequency])
         plt.ylim([0, 0.6])
@@ -439,7 +457,9 @@ def plot_impact_of_threshold_multispecies(ipaths_redstart = None, ipaths_chaffin
         plt.ylabel("confidence", fontsize=font_size)
 
         # Add legend with title and font size
-        plt.legend(title='Confidence Threshold', title_fontsize=font_size, fontsize=font_size)
+        plt.legend(title='Confidence Threshold', title_fontsize=font_size, fontsize=font_size, ncol=2)
+
+        plt.grid(True)
 
         plt.tight_layout()
         species = ["redstart", "chaffinch", "tit"]
@@ -453,7 +473,7 @@ def plot_impact_of_threshold_multispecies(ipaths_redstart = None, ipaths_chaffin
 
 
 def plot_evaluation_of_timeDifferences_SingleSource(base_path = './data/processed/simulation/single_source/tdoa/',
-                                                    opath="opath.pdf"):
+                                                    opath="opath.pdf", font_size=40):
 
     def calculate_time_differences(filepath, max_deviation_to_ground_truth=3.0):
         """Calculate precise time estimations from pickle file."""
@@ -483,7 +503,7 @@ def plot_evaluation_of_timeDifferences_SingleSource(base_path = './data/processe
 
     def plot_data(data, bird, thresholds, linestyles, colors, fontsize=24):
         """Plot data for given bird and thresholds."""
-        plt.figure(figsize=(14, 8))
+        plt.figure(figsize=(20, 8))
         for sensitivity, values in data[bird].items():
             plt.plot(thresholds, values, linestyle=linestyles[sensitivity], color=colors[bird],
                      label=f'sensitivity: {sensitivity}')
@@ -519,12 +539,12 @@ def plot_evaluation_of_timeDifferences_SingleSource(base_path = './data/processe
     }
 
     for bird in spec_to_sens_2_threshold.keys():
-        plot_data(spec_to_sens_2_threshold, bird, thresholds, linestyles, colors, fontsize=24)
+        plot_data(spec_to_sens_2_threshold, bird, thresholds, linestyles, colors, fontsize=font_size)
 
 
 
 def plot_evaluation_of_timdeDifferences_MultiSource(base_path = './data/processed/simulation/multi_source/tdoa/',
-                                                    opath="opath.pdf"):
+                                                    opath="opath.pdf", font_size=40):
     def calculate_time_differences(filepath, max_deviation_to_ground_truth=3.0):
         """Calculate precise time estimations from pickle file."""
         with open(filepath, 'rb') as pkl_file:
@@ -539,7 +559,7 @@ def plot_evaluation_of_timdeDifferences_MultiSource(base_path = './data/processe
 
         return round(precise_estimations_ctr / 99 ** 2, 2)
 
-    def gather_data(base_path, species, sensitivities, thresholds):
+    def gather_data(base_path, species, sensitivities, thresholds, plot_appendices=True):
         """Gather precise estimation data for multiple species."""
         spec_to_sens_2_threshold = {}
         for bird in species:
@@ -552,6 +572,9 @@ def plot_evaluation_of_timdeDifferences_MultiSource(base_path = './data/processe
                     filepath = os.path.join(base_path,bird,
                                             f"{sensitivity}_{threshold}.pkl")
                     estimation = calculate_time_differences(filepath)
+                    if plot_appendices:
+                        plot_time_differences(filepath, "test.pdf")
+                        exit(1)
                     ctr_estimations.append(estimation)
                     print(estimation, end=' & ')
                 sens_to_threshold[sensitivity] = ctr_estimations
@@ -577,20 +600,20 @@ def plot_evaluation_of_timdeDifferences_MultiSource(base_path = './data/processe
         plt.savefig(opath)
         plt.show()
 
-    def plot_all_data(data, thresholds, linestyles, colors, opath, fontsize=24):
+    def plot_all_data(data, thresholds, linestyles, colors, opath, font_size=24):
         """Plot data for all species in one plot."""
-        plt.figure(figsize=(14, 8))
+        plt.figure(figsize=(20, 8))
         for bird, bird_data in data.items():
             for sensitivity, values in bird_data.items():
                 plt.plot(thresholds, values, linestyle=linestyles[sensitivity], color=colors[bird],
-                         label=f'{bird.replace("_", " ")} - sensitivity {sensitivity}')
-        plt.xlabel('Confidence Threshold', fontsize=fontsize)
-        plt.ylabel('Number of Estimations Matching Ground-Truth (\%)', fontsize=fontsize)
-        plt.legend(fontsize=fontsize, ncol=3)
+                         label=f'{sensitivity} ({bird.replace("_", " ").replace("Common", "C.").replace("Great", "G.")})')
+        plt.xlabel('Confidence Threshold', fontsize=font_size)
+        plt.ylabel('Number of Estimations Matching Ground-Truth (\%)', fontsize=font_size)
+        plt.legend(title="Sensitivity", title_fontsize=24,  fontsize=24, ncol=3,loc="upper right")
         plt.xlim(0, max(thresholds))
         plt.ylim(0, 1)
-        plt.yticks([i / 10.0 for i in range(11)], fontsize=fontsize)
-        plt.xticks(fontsize=fontsize)
+        plt.yticks([i / 10.0 for i in range(11)], fontsize=font_size)
+        plt.xticks(fontsize=font_size)
         plt.grid(True)
         plt.tight_layout()
         plt.savefig(opath)
@@ -617,5 +640,39 @@ def plot_evaluation_of_timdeDifferences_MultiSource(base_path = './data/processe
     spec_to_sens_2_threshold = gather_data(base_path, species, sensitivities, thresholds)
 
     plot_all_data(spec_to_sens_2_threshold, thresholds, linestyles, colors,
-                  opath=opath)
+                  opath=opath, font_size=font_size)
 
+
+def plot_appendices(base_path = './data/processed/simulation/multi_source/tdoa/', opath="opath.pdf", font_size=24):
+
+    # --- Single Source ---
+    for i, sensitivity in enumerate([0.5, 0.75, 1.0]):
+        for threshold in [0.0]:
+            filepath = f"./data/processed/simulation/single_source/tdoa/{sensitivity}_{threshold}.pkl"
+            plot_time_differences(filepath, opath=f"./plots/final/A_1_{i}.pdf",
+                                  threshold_ms=10.0, font_size=font_size)
+    for i, sensitivity in enumerate([1.25, 1.5]):
+        for threshold in [0.1]:
+            filepath = f"./data/processed/simulation/single_source/tdoa/{sensitivity}_{threshold}.pkl"
+            plot_time_differences(filepath, opath=f"./plots/final/A_1_{i+2}.pdf",
+                                  threshold_ms=10.0, font_size=font_size)
+
+    # --- Multi Source ---
+    species = ['Common_Redstart', 'Common_Chaffinch', 'Great_Tit']
+
+    for i, bird in enumerate(species):
+        print("Species:", bird)
+        threshold = 0.0
+        for j, sensitivity in enumerate([0.5, 0.75]):
+            print("Sensitivity:", sensitivity, end='  |  ')
+            filepath = os.path.join(base_path, bird,
+                                    f"{sensitivity}_{threshold}.pkl")
+            plot_time_differences(filepath, os.path.join(opath, f"A_{i+2}_{j}.pdf"), font_size=font_size, threshold_ms=10.0)
+    for i, bird in enumerate(species):
+        print("Species:", bird)
+        threshold = 0.1
+        for j, sensitivity in enumerate([1.0, 1.25, 1.5]):
+            print("Sensitivity:", sensitivity, end='  |  ')
+            filepath = os.path.join(base_path, bird,
+                                    f"{sensitivity}_{threshold}.pkl")
+            plot_time_differences(filepath, os.path.join(opath, f"A_{i+2}_{j+2}.pdf"), font_size=font_size, threshold_ms=10.0)

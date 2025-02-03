@@ -8,7 +8,7 @@ from plots.evaluation.real import plot_realworld_scenario
 from plots.evaluation.simulation import lineplot_confidences_over_time_and_distance, plot_time_differences, \
     plot_multisource_lineplot_confidences_over_time_and_distance, plot_impact_of_threshold_singlespecies, \
     plot_impact_of_threshold_multispecies, plot_evaluation_of_timeDifferences_SingleSource, \
-    plot_evaluation_of_timdeDifferences_MultiSource
+    plot_evaluation_of_timdeDifferences_MultiSource, plot_appendices
 from plots.graphical_abstract.graphical_abstract import graphical_abstract, graphical_abstract_2
 from plots.motivation.motivation import plot_motivational_figures
 from scripts.cdse import CDSE
@@ -30,48 +30,48 @@ def main_paper_plots():
     #
     # print("# --- Evaluation Dataset --- #")
     # plot_spectrogram(audio_path = "./data/raw/simulation/single_source/audio/node[50]/microphones[0].wav",
-    #                      output_image_path = "./plots/final/Figure_2_2.pdf", font_size=36, multispecies=False)
+    #                      output_image_path = "./plots/final/Figure_2_2.pdf", font_size=60, multispecies=False)
     # plot_spectrogram(audio_path="./data/processed/real/audio/real_soundscape_with_low_interference.wav",
-    #                      output_image_path="./plots/final/Figure_2_3.pdf", font_size=36, multispecies=None)
+    #                      output_image_path="./plots/final/Figure_2_3.pdf", font_size=60, multispecies=None)
     # plot_spectrogram(audio_path = "./data/raw/simulation/multi_sources/audio/node[50]/microphones[0].wav",
-    #                      output_image_path = "./plots/final/Figure_2_4.pdf", font_size=36, multispecies=True)
+    #                      output_image_path = "./plots/final/Figure_2_4.pdf", font_size=60, multispecies=True)
     # plot_spectrogram(audio_path = "./data/processed/real/audio/node29_20230603_3306-3366.wav",
-    #                      output_image_path = "./plots/final/Figure_2_5.pdf", font_size=36, multispecies=None, xlim=[0, 60])
+    #                      output_image_path = "./plots/final/Figure_2_5.pdf", font_size=60, multispecies=None, xlim=[0, 60])
     #
     # print("# --- Evaluation Single_Source --- #")
     # lineplot_confidences_over_time_and_distance(path='./data/processed/simulation/single_source/cdse/0.5_0.0.pkl',
-    #                                             ofile='./plots/final/Figure_3_1.pdf', font_size=26, multi_source=False)
+    #                                             ofile='./plots/final/Figure_3_1.pdf', font_size=40, legend_fontsize=30, multi_source=False)
     # lineplot_confidences_over_time_and_distance(path='./data/processed/simulation/single_source/cdse/1.0_0.0.pkl',
-    #                                             ofile='./plots/final/Figure_3_2.pdf', font_size=26, multi_source=False)
+    #                                             ofile='./plots/final/Figure_3_2.pdf', font_size=40, legend_fontsize=30,multi_source=False)
     # lineplot_confidences_over_time_and_distance(path='./data/processed/simulation/single_source/cdse/1.5_0.0.pkl',
-    #                                             ofile='./plots/final/Figure_3_3.pdf', font_size=26, multi_source=False)
-
+    #                                             ofile='./plots/final/Figure_3_3.pdf', font_size=40, legend_fontsize=30, multi_source=False)
+    #
     # print("# --- Evaluation Single_Source Time Difference Estimation --- #")
     # for i, sensitivity in enumerate([0.5, 0.75, 1.0, 1.25, 1.5]):
     #     for threshold in [0.0]:
     #         filepath = f"./data/processed/simulation/single_source/tdoa/{sensitivity}_{threshold}.pkl"
     #         plot_time_differences(filepath, opath=f"./plots/final/Figure_6_{i}.pdf",
     #                               threshold_ms=10.0, font_size=20)
-
-    print("# --- Evaluation Multi_Source Time Difference Estimation --- #")
+    #
+    # print("# --- Evaluation Multi_Source Time Difference Estimation --- #")
     # plot_multisource_lineplot_confidences_over_time_and_distance(
     #     ipaths=[
     #         './data/processed/simulation/multi_source/cdse/Common_Redstart/0.5_0.0.pkl',
     #         './data/processed/simulation/multi_source/cdse/Common_Chaffinch/0.5_0.0.pkl',
     #         './data/processed/simulation/multi_source/cdse/Great_Tit/0.5_0.0.pkl'],
-    #     opath='./plots/final/Figure_4_1.pdf', font_size=16)
+    #     opath='./plots/final/Figure_4_1.pdf', font_size=40, legend_fontsize=26)
     # plot_multisource_lineplot_confidences_over_time_and_distance(
     #     ipaths=[
     #         './data/processed/simulation/multi_source/cdse/Common_Redstart/1.0_0.0.pkl',
     #         './data/processed/simulation/multi_source/cdse/Common_Chaffinch/1.0_0.0.pkl',
     #         './data/processed/simulation/multi_source/cdse/Great_Tit/1.0_0.0.pkl'],
-    #     opath='./plots/final/Figure_4_2.pdf', font_size=16)
+    #     opath='./plots/final/Figure_4_2.pdf', font_size=40, legend_fontsize=26)
     # plot_multisource_lineplot_confidences_over_time_and_distance(
     #     ipaths=[
     #         './data/processed/simulation/multi_source/cdse/Common_Redstart/1.5_0.0.pkl',
     #         './data/processed/simulation/multi_source/cdse/Common_Chaffinch/1.5_0.0.pkl',
     #         './data/processed/simulation/multi_source/cdse/Great_Tit/1.5_0.0.pkl'],
-    #     opath='./plots/final/Figure_4_3.pdf', font_size=16)
+    #     opath='./plots/final/Figure_4_3.pdf', font_size=40, legend_fontsize=26)
     #
     # print("# --- Evaluation Threshold's Impact --- #")
     # plot_impact_of_threshold_singlespecies(ipaths_redstart = [
@@ -81,19 +81,23 @@ def main_paper_plots():
     #         './data/processed/simulation/single_source/cdse/1.5_0.3.pkl',
     #         './data/processed/simulation/single_source/cdse/1.5_0.4.pkl',
     #         './data/processed/simulation/single_source/cdse/1.5_0.5.pkl'
-    #     ], opath="./plots/final/Figure_7.pdf")
-    # plot_impact_of_threshold_multispecies(opath="./plots/final/Figure_8")  # ".NUMBER_pdf" is appended automatically
+    #     ], opath="./plots/final/Figure_7.pdf", font_size=40)
+    # plot_impact_of_threshold_multispecies(opath="./plots/final/Figure_8", font_size=40)  # ".NUMBER_pdf" is appended automatically
     #
     # print("# --- Evaluation TimeDifference Accuracy --- #")
     # plot_evaluation_of_timeDifferences_SingleSource(base_path = './data/processed/simulation/single_source/tdoa/',
-    #                                                 opath="./plots/final/Figure_9_1.pdf")
+    #                                                 opath="./plots/final/Figure_9_1.pdf", font_size=24)
     # plot_evaluation_of_timdeDifferences_MultiSource(base_path = './data/processed/simulation/multi_source/tdoa/',
-    #                                                 opath="./plots/final/Figure_9_2.pdf")
+    #                                                 opath="./plots/final/Figure_9_2.pdf", font_size=24)
     #
     # print("# --- Evaluation real-world Data --- #")
-    plot_realworld_scenario(audio_file ='./data/processed/real/audio/node29_20230603_3306-3366.wav',
-                            opath="./plots/final/Figure_5.pdf",
-                            font_size=20)
+    # plot_realworld_scenario(audio_file ='./data/processed/real/audio/node29_20230603_3306-3366.wav',
+    #                         opath="./plots/final/Figure_5.pdf",
+    #                         font_size=40)
+
+    print("# --- Evaluation Appendix --- #")
+    plot_appendices(base_path='./data/processed/simulation/multi_source/tdoa/', opath="./plots/final/", font_size=20)
+
 
 def main_paper_process_data():
     # --- Parse the classification results of the simulated setup, calculate CDSE and calculate the time differences --- #
@@ -315,8 +319,8 @@ def main_paper_process_data():
             with open(fpath, 'wb') as fd:
                 pickle.dump(series, fd)
 
-    # scenario_single_species()
-    # scenario_multi_species()
+    scenario_single_species()
+    scenario_multi_species()
     scenario_real_world()
 
 def main_minimal_usage_example():
@@ -391,4 +395,4 @@ if __name__ == '__main__':
     main_paper_plots()
 
     # Checkout how CDSE is applied
-    # main_minimal_usage_example()
+    main_minimal_usage_example()
